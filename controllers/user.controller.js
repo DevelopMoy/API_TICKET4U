@@ -53,7 +53,8 @@ const loginUser = async(req,res)=>{
                     ok: true,
                     msg: "Logging in succesfull",
                     jwt: jwt.sign({ role: findedUser.rol, uid_usr: findedUser._id }, process.env.JWT_PASS),
-                    role: findedUser.rol
+                    role: findedUser.rol,
+                    uid_ust: findedUser._id
                 });
             }else{
                 return res.status(400).json({
