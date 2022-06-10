@@ -16,6 +16,10 @@ router.post("",[
     helpersMdw.validateErrors
 ],controller.createUser);
 */
+router.post("/get_eventos",[
+    check("statusFilter").not().isEmpty(),
+    helpersMdw.validateErrors
+],controller.get_eventos)
 
 router.post("/create_lugar",[
     check("nombre").not().isEmpty(),
@@ -25,6 +29,9 @@ router.post("/create_lugar",[
     authMdw.isAdmin,
     helpersMdw.validateErrors
 ],controller.create_lugar);
+
+router.get("/get_lugares",[
+],controller.get_lugares)
 
 router.post("/create_seccion",[
     check("nombre").not().isEmpty(),

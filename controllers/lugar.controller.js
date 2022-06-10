@@ -119,9 +119,44 @@ const create_evento = async (req,res)=>{
     
 }
 
+const get_lugares = async (req,res)=>{
+    try{
+        return res.status(200).json({
+            ok:true,
+            lugaresList: await Lugar.find({})
+        });
+    }catch(error){
+        return res.status(500).json({
+            msg: "Error at retreaving lugares, please veriffy "+error,
+            error: true
+        })
+    }
+}
+
+const get_eventos = async (req,res)=>{
+    const {statusFilter,evento_UID} = req.body;
+
+    let eventoQuery = evento_UID ? {_id:evento_UID,status:statusFilter}:{status:statusFilter}
+
+
+    try{
+        return res.status(200).json({
+            ok:true,
+            eventosList: await Evento.find(eventoQuery)
+        });
+    }catch(error){
+        return res.status(500).json({
+            msg: "Error at retreaving eventos, please veriffy "+error,
+            error: true
+        })
+    }
+
+}
 
 module.exports = {
     create_lugar,
     create_seccion,
-    create_evento
+    create_evento,
+    get_lugares,
+    get_eventos
 }
