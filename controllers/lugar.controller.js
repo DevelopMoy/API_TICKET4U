@@ -37,14 +37,14 @@ const create_lugar = async (req,res)=>{
 }
 
 const create_seccion = async (req,res)=>{
-    const {nombre,numAsientos,precioUnitario,uid_lugar} = req.body;
+    const {nombre,numAsientos,precioUnitario,uid_evento} = req.body;
 
     try{
         const newSeccion = new Seccion({
             nombre,
             numAsientos,
             precioUnitario,
-            uid_lugar
+            uid_evento
         });
         newSeccion.save((error,seccionNw)=>{
             if (!error){
@@ -134,9 +134,16 @@ const get_lugares = async (req,res)=>{
 }
 
 const get_eventos = async (req,res)=>{
-    const {statusFilter,evento_UID} = req.body;
+    const {statusFilter,uidOrganizador} = req.body;
 
-    let eventoQuery = evento_UID ? {_id:evento_UID,status:statusFilter}:{status:statusFilter}
+    let eventoQuery;
+
+    if (statusFilter == "ALL"){
+        eventoQuery = {organizador_jwt:uidOrganizador};
+    }else{
+      eventoQuery = {organizador_jwt:uidOrganizador,status:statusFilter};
+    }
+    
 
 
     try{

@@ -17,6 +17,7 @@ router.post("",[
 ],controller.createUser);
 */
 router.post("/get_eventos",[
+    check("uidOrganizador").not().isEmpty(),
     check("statusFilter").not().isEmpty(),
     helpersMdw.validateErrors
 ],controller.get_eventos)
@@ -37,9 +38,7 @@ router.post("/create_seccion",[
     check("nombre").not().isEmpty(),
     check("numAsientos").not().isEmpty(),
     check("precioUnitario").not().isEmpty(),
-    check("uid_lugar").not().isEmpty(),
-    check("uid_owner").not().isEmpty(),
-    authMdw.isAdmin,
+    check("uid_evento").not().isEmpty(),
     helpersMdw.validateErrors
 ],controller.create_seccion);
 

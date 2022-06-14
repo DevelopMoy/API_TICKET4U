@@ -13,11 +13,7 @@ const SeccionSchema = Schema({
         type: Number,
         required: true
     },
-    uid_lugar: {
-        type: String,
-        required: true
-    },
-    uid_owner: {
+    uid_evento: {
         type: String,
         required: true
     }
