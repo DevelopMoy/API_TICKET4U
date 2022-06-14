@@ -3,6 +3,7 @@ const Usuario = require("../models/User");
 const DatoFacturacion = require("../models/DatoFacturacion");
 const bcrypt = require("bcryptjs");
 const { body } = require('express-validator');
+const MetodoPago = require("../models/MetodoPago");
 
 const createCliente = async(req,res)=>{
     const {nombre,apellido,username,e_mail,password}=req.body;
@@ -329,6 +330,61 @@ const deleteDatosFacturac = async (req,res)=>{
 
 }
 
+const createMetodoPago = async(req,res)=>{
+    const {banco,numeroTarjeta,fechaVencimiento,owner} = req.body;
+
+    try{
+        const newMetodoPago = new MetodoPago({
+            banco,numeroTarjeta,fechaVencimiento,owner, status: true
+        });
+        newMetodoPago.save((error,datoNw)=>{
+            if (!error){
+                return res.status(200).json({
+                    msg: "Metodo pago created succesfully",
+                    uid: datoNw.id
+                   });
+            }else{
+                return res.status(400).json({
+                    msg: "Error at creating metodo pago, please veriffy "+error,
+                    error: true
+                })
+            }
+       });
+      
+    }catch(errorDB ){
+        console.log("Error at creating metodo pago");
+        return res.status(400).json({
+            msg: "Error at creating metodo pago , please veriffy "+errorDB,
+            error: true
+        })
+    }  
+}
+
+const getMetodosPago = async(req,res)=>{
+    const {uid_owner} = req.body;
+
+    try{
+        const metodosPagoList = await MetodoPago.find({owner:uid_owner,status: true});
+        if (metodosPagoList){
+            return res.status(200).json({
+                ok:true,
+                metodPago: metodosPagoList
+            });
+        }else{
+            return res.status(400).json({
+                ok:false,
+                msg: "User not found"
+            });
+        }
+      
+    }catch(error){
+        return res.status(500).json({
+            msg: "Error at retreaving metodos pago, please veriffy "+error,
+            error: true
+        })
+    }
+}
+
 module.exports = {
     createCliente,
     createEmpresario,
@@ -339,5 +395,7 @@ module.exports = {
     get_single_user,
     create_datoFacturacion,
     get_datosFact,
-    deleteDatosFacturac
+    deleteDatosFacturac,
+    createMetodoPago,
+    getMetodosPago
 }

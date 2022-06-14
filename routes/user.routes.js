@@ -92,4 +92,17 @@ router.delete("/delete_datoFact",[
     helpersMdw.validateErrors
 ],controller.deleteDatosFacturac);
 
+router.post("/create_metodopago",[
+    check("numeroTarjeta").not().isEmpty(),
+    check("banco").not().isEmpty(),
+    check("fechaVencimiento").not().isEmpty(),
+    check("owner").not().isEmpty(),
+    helpersMdw.validateErrors
+],controller.createMetodoPago);
+
+router.post("/get_metodospago",[
+    check("uid_owner"),
+    helpersMdw.validateErrors
+],controller.getMetodosPago)
+
 module.exports = router;
