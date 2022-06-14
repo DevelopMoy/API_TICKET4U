@@ -17,7 +17,6 @@ router.post("",[
 ],controller.createUser);
 */
 router.post("/get_eventos",[
-    check("uidOrganizador").not().isEmpty(),
     check("statusFilter").not().isEmpty(),
     helpersMdw.validateErrors
 ],controller.get_eventos)

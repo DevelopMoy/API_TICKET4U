@@ -139,12 +139,18 @@ const get_eventos = async (req,res)=>{
     let eventoQuery;
 
     if (statusFilter == "ALL"){
-        eventoQuery = {organizador_jwt:uidOrganizador};
+        if (uidOrganizador){
+            eventoQuery = {organizador_jwt:uidOrganizador};
+        }else{
+            eventoQuery = {};
+        }
     }else{
-      eventoQuery = {organizador_jwt:uidOrganizador,status:statusFilter};
+        if (uidOrganizador){
+            eventoQuery = {organizador_jwt:uidOrganizador,status:statusFilter};
+        }else{
+            eventoQuery = {status:statusFilter};
+        }
     }
-    
-
 
     try{
         return res.status(200).json({
