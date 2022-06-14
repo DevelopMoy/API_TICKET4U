@@ -20,7 +20,13 @@ const EventoSchema = Schema({
     status: {
         type: String,
         required: true
-    }
+    },
+    secciones: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "seccion"
+        }
+    ]
 });
 
 module.exports=model("evento",EventoSchema);

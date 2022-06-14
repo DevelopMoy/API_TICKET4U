@@ -47,7 +47,6 @@ router.post("/get_users",[
 router.post("/get_single_user",[
     check("jwt").not().isEmpty(),
     check("uid_usr").not().isEmpty(),
-    authMdw.isAdmin,
     helpersMdw.validateErrors
 ],controller.get_single_user);
 

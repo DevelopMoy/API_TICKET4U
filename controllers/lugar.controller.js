@@ -155,7 +155,7 @@ const get_eventos = async (req,res)=>{
     try{
         return res.status(200).json({
             ok:true,
-            eventosList: await Evento.find(eventoQuery)
+            eventosList: await Evento.find(eventoQuery).populate("secciones")
         });
     }catch(error){
         return res.status(500).json({
