@@ -153,10 +153,35 @@ const get_eventos = async (req,res)=>{
 
 }
 
+const edit_evento = async (req,res)=>{
+    const {nombreEvento,lugarEvento,organizador_jwt,fecha,uid_evento} = req.body;
+    try{
+        const succesfull = await Evento.findOneAndUpdate({_id:uid_evento},{status:"ACTIVE",nombreEvento,lugarEvento,organizador_jwt,fecha});
+        if (succesfull){
+            return res.status(200).json({
+                msg:"Succesfully updated",
+                ok: true
+            });
+        }else{
+            return res.status(400).json({
+                msg: "Error at updating "+succesfull,
+                ok: false
+            });
+        }
+    }catch(error){
+        return res.status(500).json({
+            error: true,
+            msg: "Internal error: "+error
+        });
+    }
+
+}
+
 module.exports = {
     create_lugar,
     create_seccion,
     create_evento,
     get_lugares,
-    get_eventos
+    get_eventos,
+    edit_evento
 }

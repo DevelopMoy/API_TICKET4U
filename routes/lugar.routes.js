@@ -50,4 +50,13 @@ router.post("/create_evento",[
     helpersMdw.validateErrors
 ],controller.create_evento);
 
+router.put("/edit_evento",[
+    check("uid_evento").not().isEmpty(),
+    check("nombreEvento").not().isEmpty(),
+    check("lugarEvento").not().isEmpty(),
+    check("organizador_jwt").not().isEmpty(),
+    check("fecha").not().isEmpty(),
+    helpersMdw.validateErrors
+],controller.edit_evento)
+
 module.exports = router;

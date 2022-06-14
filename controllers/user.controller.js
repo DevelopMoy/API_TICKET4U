@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const Usuario = require("../models/User");
+const DatoFacturacion = require("../models/DatoFacturacion");
 const bcrypt = require("bcryptjs");
 const { body } = require('express-validator');
 
@@ -237,6 +238,97 @@ const get_single_user = async(req,res)=>{
 
 }
 
+const create_datoFacturacion = async(req,res)=>{
+    const {nombre,regimenFiscal,calle,codigoPostal,colonia,ciudad,estado,RFC,razonSocial,owner_uid} = req.body;
+
+    try{
+        const newDatoFacturacion = new DatoFacturacion({
+            nombre,
+            regimenFiscal,
+            calle,
+            codigoPostal,
+            colonia,
+            ciudad,
+            estado,
+            RFC,
+            razonSocial,
+            owner_uid,
+            status: true
+        });
+        newDatoFacturacion.save((error,datoNw)=>{
+            if (!error){
+                return res.status(200).json({
+                    msg: "Dato facturacion created succesfully",
+                    uid: datoNw.id
+                   });
+            }else{
+                return res.status(400).json({
+                    msg: "Error at creating dato facturacion, please veriffy "+error,
+                    error: true
+                })
+            }
+       });
+
+      
+    }catch(errorDB ){
+        console.log("Error at creating dato facturacion");
+        return res.status(400).json({
+            msg: "Error at creating dato facturacion , please veriffy "+errorDB,
+            error: true
+        })
+    }  
+}
+
+const get_datosFact = async(req,res)=>{
+    const {uid_usr} = req.body;
+    try{
+        const datoFactList = await DatoFacturacion.find({owner_uid:uid_usr});
+        if (datoFactList){
+            return res.status(200).json({
+                ok:true,
+                datos_fact: datoFactList
+            });
+        }else{
+            return res.status(400).json({
+                ok:false,
+                msg: "User not found"
+            });
+        }
+      
+    }catch(error){
+        return res.status(500).json({
+            msg: "Error at retreaving dato fact, please veriffy "+error,
+            error: true
+        })
+    }
+
+}
+
+const deleteDatosFacturac = async (req,res)=>{
+    const {uid_datoFact} = req.body;
+
+    try{
+        const succesfullQuery = await DatoFacturacion.findOneAndUpdate({_id:uid_datoFact},{status:false});
+        if (succesfullQuery){
+            return res.status(200).json({
+                msg:"Succesfully deleted",
+                ok: true
+            });
+        }else{
+            return res.status(400).json({
+                msg: "Error at deleting",
+                ok: false
+            });
+        }
+    }catch(error){
+        return res.status(500).json({
+            error: true,
+            msg: "Internal error: "+error
+        });
+    }
+
+}
+
 module.exports = {
     createCliente,
     createEmpresario,
@@ -244,5 +336,8 @@ module.exports = {
     getUsers,
     editUser,
     deleteUser,
-    get_single_user
+    get_single_user,
+    create_datoFacturacion,
+    get_datosFact,
+    deleteDatosFacturac
 }

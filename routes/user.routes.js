@@ -4,6 +4,7 @@ const {check} = require('express-validator');
 const router = express.Router();
 const controller = require('../controllers/user.controller');
 const authMdw = require('../middlewares/auth.middleware');
+const { route } = require('express/lib/application');
 
 router.post("/login",[
     check("username").not().isEmpty(),
@@ -67,5 +68,29 @@ router.delete("/delete_user",[
     authMdw.isAdmin,
     helpersMdw.validateErrors
 ],controller.deleteUser);
+
+router.post("/create_datoFact",[
+    check("nombre").not().isEmpty(),
+    check("regimenFiscal").not().isEmpty(),
+    check("calle").not().isEmpty(),
+    check("codigoPostal").not().isEmpty(),
+    check("colonia").not().isEmpty(),
+    check("ciudad").not().isEmpty(),
+    check("estado").not().isEmpty(),
+    check("RFC").not().isEmpty(),
+    check("razonSocial").not().isEmpty(),
+    check("owner_uid").not().isEmpty(),
+    helpersMdw.validateErrors
+],controller.create_datoFacturacion);
+
+router.post("/get_datFact",[
+    check("uid_usr").not().isEmpty(),
+    helpersMdw.validateErrors
+],controller.get_datosFact)
+
+router.delete("/delete_datoFact",[
+    check("uid_datoFact").not().isEmpty(),
+    helpersMdw.validateErrors
+],controller.deleteDatosFacturac);
 
 module.exports = router;
