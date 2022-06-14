@@ -137,10 +137,27 @@ const get_eventos = async (req,res)=>{
     const {statusFilter,uidOrganizador} = req.body;
 
     let eventoQuery;
-
+    let organizador_uid;
     if (statusFilter == "ALL"){
         if (uidOrganizador){
-            eventoQuery = {organizador_jwt:uidOrganizador};
+            jsonwebtoken.verify(uidOrganizador,process.env.JWT_PASS,(err,decoded)=>{
+                if (err){
+                    return res.status(401).json({
+                        ok: false,
+                        msg: "Not authorized or invalid JWT"
+                    });
+                }else {   
+                    if (decoded.role=="BUSINESS"){
+                        organizador_uid=decoded.uid_usr;    
+                    }else{
+                        return res.status(401).json({
+                            ok: false,
+                            msg: "Not authorized or invalid JWT"
+                        });
+                    }
+                }
+            });
+            eventoQuery = {organizador_jwt:organizador_uid};
         }else{
             eventoQuery = {};
         }
