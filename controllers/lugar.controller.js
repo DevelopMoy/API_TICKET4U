@@ -153,9 +153,20 @@ const get_eventos = async (req,res)=>{
     }
 
     try{
+        let eventosLista =(await Evento.find(eventoQuery));
+        const secciones = await Seccion.find();
+
         return res.status(200).json({
             ok:true,
-            eventosList: await Evento.find(eventoQuery).populate("secciones")
+            eventosList: eventosLista.map(
+                (evento)=>{
+                    const eventoNew= Object.assign(evento,{seccionesLista:secciones.filter((sec)=>sec.uid_evento==evento._id)})
+                    const regData = {...eventoNew}._doc;
+                    const listaSecc = {...eventoNew}.seccionesLista;
+                    regData.listaDeSecc = listaSecc;
+                    return regData
+                }
+            )
         });
     }catch(error){
         return res.status(500).json({
