@@ -4,18 +4,7 @@ const {check} = require('express-validator');
 const router = express.Router();
 const controller = require('../controllers/lugar.controller');
 const authMdw = require('../middlewares/auth.middleware');
-/*
-router.post("/list",[
-    check("jwt").not().isEmpty(),
-    helpersMdw.validateErrors
-],controller.getAllUsers);
 
-router.post("",[
-    check('birthDate').not().isEmpty(),
-    check('birthDate').custom(helpersMdw.checkDate),
-    helpersMdw.validateErrors
-],controller.createUser);
-*/
 router.post("/get_eventos",[
     check("statusFilter").not().isEmpty(),
     helpersMdw.validateErrors
@@ -31,7 +20,7 @@ router.post("/create_lugar",[
 ],controller.create_lugar);
 
 router.get("/get_lugares",[
-],controller.get_lugares)
+],controller.get_lugares);
 
 router.post("/create_seccion",[
     check("nombre").not().isEmpty(),
@@ -65,6 +54,16 @@ router.post("/get_secciones",[
 router.delete("/delete_seccion",[
     check("uid_seccion").not().isEmpty(),
     helpersMdw.validateErrors
-],controller.delete_seccion)
+],controller.delete_seccion);
+
+router.put("/update_lugar",[
+    check("nombre").not().isEmpty(),
+    check("ciudad").not().isEmpty(),
+    check("calle").not().isEmpty(),
+    check("estado").not().isEmpty(),
+    check("status").not().isEmpty(),
+    check("lugar_uid").not().isEmpty(),
+    helpersMdw.validateErrors
+],controller.update_lugar);
 
 module.exports = router;

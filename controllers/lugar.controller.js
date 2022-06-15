@@ -258,6 +258,35 @@ const delete_seccion = async(req,res)=>{
     }
 }
 
+const update_lugar = async (req,res)=>{
+    const {nombre,ciudad,calle,estado,status,lugar_uid} = req.body;
+    try{
+        const succesfullQuery = await Lugar.findOneAndUpdate({_id:lugar_uid},{
+            nombre,
+            ciudad,
+            calle,
+            estado,
+            status
+        });
+        if (succesfullQuery){
+            return res.status(200).json({
+                msg:"Succesfully updated",
+                ok: true
+            });
+        }else{
+            return res.status(400).json({
+                msg: "Error at updating",
+                ok: false
+            });
+        }
+    }catch(error){
+        return res.status(500).json({
+            error: true,
+            msg: "Internal error: "+error
+        });
+    }
+}
+
 module.exports = {
     create_lugar,
     create_seccion,
@@ -266,5 +295,6 @@ module.exports = {
     get_eventos,
     edit_evento,
     get_secciones,
-    delete_seccion
+    delete_seccion,
+    update_lugar
 }
