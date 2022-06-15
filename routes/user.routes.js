@@ -116,6 +116,11 @@ router.post("/create_asiento",[
     check("metodoPago_uid").not().isEmpty(),
     check("datoFacturacion_uid").not().isEmpty(),
     helpersMdw.validateErrors
-],controller.create_asiento)
+],controller.create_asiento);
+
+router.post("/get_boletos_usuario",[
+    check("usuario_uid").not().isEmpty(),
+    helpersMdw.validateErrors
+],controller.get_asientos_usuario)
 
 module.exports = router;

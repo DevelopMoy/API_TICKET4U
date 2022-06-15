@@ -451,6 +451,33 @@ const create_asiento = async (req,res)=>{
     }  
 }
 
+const get_asientos_usuario = async (req,res)=>{
+    const {usuario_uid} = req.body;
+
+    try{
+        const asientosList = await Asiento.find({owner_uid:usuario_uid});
+
+        if (asientosList){
+            return res.status(200).json({
+                ok:true,
+                asientos: asientosList
+            });
+        }else{
+            return res.status(400).json({
+                ok:false,
+                msg: "User not found"
+            });
+        }
+      
+    }catch(error){
+        return res.status(500).json({
+            msg: "Error at retreaving asientos, please veriffy "+error,
+            error: true
+        })
+    }
+
+}
+
 module.exports = {
     createCliente,
     createEmpresario,
@@ -465,5 +492,6 @@ module.exports = {
     createMetodoPago,
     getMetodosPago,
     deleteMetodoPago,
-    create_asiento
+    create_asiento,
+    get_asientos_usuario
 }
