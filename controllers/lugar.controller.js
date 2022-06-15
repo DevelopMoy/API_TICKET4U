@@ -123,7 +123,7 @@ const get_lugares = async (req,res)=>{
     try{
         return res.status(200).json({
             ok:true,
-            lugaresList: await Lugar.find({})
+            lugaresList: await Lugar.find({status:true})
         });
     }catch(error){
         return res.status(500).json({
@@ -218,11 +218,53 @@ const edit_evento = async (req,res)=>{
 
 }
 
+const get_secciones = async (req,res)=>{
+    const {uid_evento} = req.body;
+
+    try{
+        return res.status(200).json({
+            ok:true,
+            seccionesList: await Seccion.find({uid_evento})
+        });
+    }catch(error){
+        return res.status(500).json({
+            msg: "Error at retreaving secciones, please veriffy "+error,
+            error: true
+        })
+    }
+}
+
+const delete_seccion = async(req,res)=>{
+    const {uid_seccion} = req.body;
+
+    try{
+        const succesfullQuery = await Seccion.findOneAndUpdate({_id:uid_seccion},{uid_evento:""});
+        if (succesfullQuery){
+            return res.status(200).json({
+                msg:"Succesfully deleted",
+                ok: true
+            });
+        }else{
+            return res.status(400).json({
+                msg: "Error at deleting",
+                ok: false
+            });
+        }
+    }catch(error){
+        return res.status(500).json({
+            error: true,
+            msg: "Internal error: "+error
+        });
+    }
+}
+
 module.exports = {
     create_lugar,
     create_seccion,
     create_evento,
     get_lugares,
     get_eventos,
-    edit_evento
+    edit_evento,
+    get_secciones,
+    delete_seccion
 }

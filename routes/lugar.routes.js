@@ -55,6 +55,16 @@ router.put("/edit_evento",[
     check("organizador_jwt").not().isEmpty(),
     check("fecha").not().isEmpty(),
     helpersMdw.validateErrors
-],controller.edit_evento)
+],controller.edit_evento);
+
+router.post("/get_secciones",[
+    check("uid_evento").not().isEmpty(),
+    helpersMdw.validateErrors
+],controller.get_secciones);
+
+router.delete("/delete_seccion",[
+    check("uid_seccion").not().isEmpty(),
+    helpersMdw.validateErrors
+],controller.delete_seccion)
 
 module.exports = router;
