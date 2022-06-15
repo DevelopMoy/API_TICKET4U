@@ -66,4 +66,9 @@ router.put("/update_lugar",[
     helpersMdw.validateErrors
 ],controller.update_lugar);
 
+router.post("/get_lugar",[
+    check("uid_lugar").not().isEmpty(),
+    helpersMdw.validateErrors
+],controller.get_single_lugar);
+
 module.exports = router;

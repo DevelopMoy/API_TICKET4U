@@ -287,6 +287,21 @@ const update_lugar = async (req,res)=>{
     }
 }
 
+const get_single_lugar = async (req,res)=>{
+    const {uid_lugar} = req.body;
+    try{
+        return res.status(200).json({
+            ok:true,
+            lugar: await Lugar.findOne({status:true, _id: uid_lugar})
+        });
+    }catch(error){
+        return res.status(500).json({
+            msg: "Error at retreaving lugar, please veriffy "+error,
+            error: true
+        })
+    }
+}
+
 module.exports = {
     create_lugar,
     create_seccion,
@@ -296,5 +311,6 @@ module.exports = {
     edit_evento,
     get_secciones,
     delete_seccion,
-    update_lugar
+    update_lugar,
+    get_single_lugar
 }
