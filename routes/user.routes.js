@@ -128,4 +128,14 @@ router.post("/get_boleto_detailed",[
     helpersMdw.validateErrors
 ],controller.get_boleto_detail);
 
+router.post("/get_reporte_por_evento",[
+    check("evento_uid").not().isEmpty(),
+    helpersMdw.validateErrors
+],controller.get_reporte_por_evento)
+
+router.post("/get_reporte_lugares",[
+    check("lugar_uid").not().isEmpty(),
+    helpersMdw.validateErrors
+],controller.get_reporte_lugares)
+
 module.exports = router;

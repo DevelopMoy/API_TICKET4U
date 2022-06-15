@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const Usuario = require("../models/User");
 const Asiento = require("../models/Asiento");
 const Seccion = require("../models/Seccion");
+const Lugar = require("../models/Lugar");
+const Evento = require("../models/Evento");
 const DatoFacturacion = require("../models/DatoFacturacion");
 const bcrypt = require("bcryptjs");
 const { body } = require('express-validator');
@@ -506,6 +508,90 @@ const get_boleto_detail = async (req,res)=>{
             error: true
         })
     }
+}
+
+const get_reporte_por_evento = async (req,res)=>{
+    const {evento_uid} = req.body;
+
+    try{
+        const eventoCapt = await Evento.findOne({_id:evento_uid});
+        const seccionesCapt = await Seccion.find({uid_evento: evento_uid});
+        const boletosLista = [];
+        const completeData = [];
+
+        for(let seccion of seccionesCapt){
+            const boletosDeSeccion = await Asiento.find({seccion_uid:seccion._id});
+            boletosLista.push(...boletosDeSeccion);
+        }
+        //Get complete data
+        for (let boletoNuevo of boletosLista){
+            const metodoPagoBolet = await MetodoPago.findOne({_id: boletoNuevo.metodoPago_uid});
+            const datosFactBolet = await DatoFacturacion.findOne({_id: boletoNuevo.datoFacturacion_uid});
+
+            completeData.push({
+                datosBoleto: boletoNuevo,
+                datosMetodoPago: metodoPagoBolet,
+                datosFacturacion: datosFactBolet
+            });
+        }
+
+        if (eventoCapt&&seccionesCapt){
+            return res.status(200).json({
+                ok:true,
+                eventoData: eventoCapt,
+                listaBoletos: completeData
+            });
+        }else{
+            return res.status(400).json({
+                ok:false,
+                msg: "User not found"
+            });
+        }
+      
+    }catch(error){
+        return res.status(500).json({
+            msg: "Error at retreaving boleto, please veriffy "+error,
+            error: true
+        })
+    }
+}
+
+const get_reporte_lugares = async(req,res)=>{
+    const {lugar_uid} = req.body;
+
+    try{
+        const lugarDetails = await Lugar.findOne({_id:lugar_uid});
+        const listaEventosLugar = await Evento.find({lugarEvento: lugar_uid});
+        const listaEventosComplete = [];
+
+        for (let evento of listaEventosLugar){
+            const organizador = await Usuario.find({_id:evento.organizador_jwt});
+            listaEventosComplete.push({
+                eventoDetalles: evento,
+                organizador
+            });
+        }
+
+
+        if (lugarDetails){
+            return res.status(200).json({
+                ok:true,
+                lugarDetails,
+                listaEventosComplete
+            });
+        }else{
+            return res.status(400).json({
+                ok:false,
+                msg: "Lugar not found"
+            });
+        }
+      
+    }catch(error){
+        return res.status(500).json({
+            msg: "Error at retreaving lugar, please veriffy "+error,
+            error: true
+        })
+    }
 
 }
 
@@ -525,5 +611,7 @@ module.exports = {
     deleteMetodoPago,
     create_asiento,
     get_asientos_usuario,
-    get_boleto_detail
+    get_boleto_detail,
+    get_reporte_por_evento,
+    get_reporte_lugares
 }
