@@ -113,6 +113,8 @@ router.delete("/delete_metodopago",[
 router.post("/create_asiento",[
     check("seccion_uid").not().isEmpty(),
     check("owner_uid").not().isEmpty(),
+    check("metodoPago_uid").not().isEmpty(),
+    check("datoFacturacion_uid").not().isEmpty(),
     helpersMdw.validateErrors
 ],controller.create_asiento)
 

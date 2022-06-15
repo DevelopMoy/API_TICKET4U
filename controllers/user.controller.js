@@ -412,11 +412,9 @@ const deleteMetodoPago = async(req,res)=>{
 }
 
 const create_asiento = async (req,res)=>{
-    const {seccion_uid,owner_uid} = req.body;
+    const {seccion_uid,owner_uid,metodoPago_uid,datoFacturacion_uid} = req.body;
     
     try{
-
-
         const limiteAsientos = (await Seccion.findOne({_id: seccion_uid})).numAsientos;
         const num_asiento = ((await Asiento.find({seccion_uid})).length+1);
 
@@ -428,7 +426,7 @@ const create_asiento = async (req,res)=>{
         }
 
         const newAsiento = new Asiento({
-            seccion_uid,owner_uid, num_asiento
+            seccion_uid,owner_uid, num_asiento,metodoPago_uid,datoFacturacion_uid
         });
         newAsiento.save((error,datoNw)=>{
             if (!error){
@@ -451,7 +449,6 @@ const create_asiento = async (req,res)=>{
             error: true
         })
     }  
-
 }
 
 module.exports = {

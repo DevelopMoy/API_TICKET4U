@@ -12,6 +12,14 @@ const AsientoSchema = Schema({
     num_asiento: {
         type: Number,
         required: true
+    },
+    metodoPago_uid: {
+        type: String,
+        required: true
+    },
+    datoFacturacion_uid: {
+        type: String,
+        required: true
     }
 });
 
