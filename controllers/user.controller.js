@@ -475,6 +475,37 @@ const get_asientos_usuario = async (req,res)=>{
             error: true
         })
     }
+}
+
+const get_boleto_detail = async (req,res)=>{
+    const {boleto_uid} = req.body;
+
+    try{
+        const asiento = await Asiento.findOne({_id:boleto_uid});
+        const seccionAsiento = await Seccion.findOne({_id:asiento.seccion_uid});
+        const metodoPagoAsiento = await MetodoPago.findOne ({_id:asiento.metodoPago_uid});
+
+
+        if (asiento && seccionAsiento && metodoPagoAsiento){
+            return res.status(200).json({
+                ok:true,
+                asiento,
+                seccionAsiento,
+                metodoPagoAsiento
+            });
+        }else{
+            return res.status(400).json({
+                ok:false,
+                msg: "User not found"
+            });
+        }
+      
+    }catch(error){
+        return res.status(500).json({
+            msg: "Error at retreaving boleto, please veriffy "+error,
+            error: true
+        })
+    }
 
 }
 
@@ -493,5 +524,6 @@ module.exports = {
     getMetodosPago,
     deleteMetodoPago,
     create_asiento,
-    get_asientos_usuario
+    get_asientos_usuario,
+    get_boleto_detail
 }

@@ -121,6 +121,11 @@ router.post("/create_asiento",[
 router.post("/get_boletos_usuario",[
     check("usuario_uid").not().isEmpty(),
     helpersMdw.validateErrors
-],controller.get_asientos_usuario)
+],controller.get_asientos_usuario);
+
+router.post("/get_boleto_detailed",[
+    check("boleto_uid").not().isEmpty(),
+    helpersMdw.validateErrors
+],controller.get_boleto_detail);
 
 module.exports = router;
