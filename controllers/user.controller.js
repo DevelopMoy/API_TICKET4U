@@ -385,6 +385,30 @@ const getMetodosPago = async(req,res)=>{
     }
 }
 
+const deleteMetodoPago = async(req,res)=>{
+    const {uid_MetodoPago} = req.body;
+
+    try{
+        const succesfullQuery = await MetodoPago.findOneAndUpdate({_id:uid_MetodoPago},{status:false});
+        if (succesfullQuery){
+            return res.status(200).json({
+                msg:"Succesfully deleted",
+                ok: true
+            });
+        }else{
+            return res.status(400).json({
+                msg: "Error at deleting",
+                ok: false
+            });
+        }
+    }catch(error){
+        return res.status(500).json({
+            error: true,
+            msg: "Internal error: "+error
+        });
+    }
+}
+
 module.exports = {
     createCliente,
     createEmpresario,
@@ -397,5 +421,6 @@ module.exports = {
     get_datosFact,
     deleteDatosFacturac,
     createMetodoPago,
-    getMetodosPago
+    getMetodosPago,
+    deleteMetodoPago
 }

@@ -103,6 +103,11 @@ router.post("/create_metodopago",[
 router.post("/get_metodospago",[
     check("uid_owner"),
     helpersMdw.validateErrors
-],controller.getMetodosPago)
+],controller.getMetodosPago);
+
+router.delete("/delete_metodopago",[
+    check("uid_MetodoPago").not().isEmpty(),
+    helpersMdw.validateErrors
+],controller.deleteMetodoPago);
 
 module.exports = router;
