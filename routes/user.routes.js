@@ -110,4 +110,10 @@ router.delete("/delete_metodopago",[
     helpersMdw.validateErrors
 ],controller.deleteMetodoPago);
 
+router.post("/create_asiento",[
+    check("seccion_uid").not().isEmpty(),
+    check("owner_uid").not().isEmpty(),
+    helpersMdw.validateErrors
+],controller.create_asiento)
+
 module.exports = router;

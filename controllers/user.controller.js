@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const Usuario = require("../models/User");
+const Asiento = require("../models/Asiento");
+const Seccion = require("../models/Seccion");
 const DatoFacturacion = require("../models/DatoFacturacion");
 const bcrypt = require("bcryptjs");
 const { body } = require('express-validator');
@@ -409,6 +411,49 @@ const deleteMetodoPago = async(req,res)=>{
     }
 }
 
+const create_asiento = async (req,res)=>{
+    const {seccion_uid,owner_uid} = req.body;
+    
+    try{
+
+
+        const limiteAsientos = (await Seccion.findOne({_id: seccion_uid})).numAsientos;
+        const num_asiento = ((await Asiento.find({seccion_uid})).length+1);
+
+        if (num_asiento>limiteAsientos+1){
+            return res.status(400).json({
+                ok: false,
+                msg: "Reached maximum ticket numbers for seccion"
+            });
+        }
+
+        const newAsiento = new Asiento({
+            seccion_uid,owner_uid, num_asiento
+        });
+        newAsiento.save((error,datoNw)=>{
+            if (!error){
+                return res.status(200).json({
+                    msg: "Asiento created succesfully",
+                    uid: datoNw.id
+                   });
+            }else{
+                return res.status(400).json({
+                    msg: "Error at creating Asiento, please veriffy "+error,
+                    error: true
+                })
+            }
+       });
+      
+    }catch(errorDB ){
+        console.log("Error at creating asiento");
+        return res.status(400).json({
+            msg: "Error at creating asiento , please veriffy "+errorDB,
+            error: true
+        })
+    }  
+
+}
+
 module.exports = {
     createCliente,
     createEmpresario,
@@ -422,5 +467,6 @@ module.exports = {
     deleteDatosFacturac,
     createMetodoPago,
     getMetodosPago,
-    deleteMetodoPago
+    deleteMetodoPago,
+    create_asiento
 }
